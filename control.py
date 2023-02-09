@@ -41,6 +41,8 @@ def setupPins():
 
     SetDirection(Direction.A)
 
+    motors.motor1.__init__(pin_pwm_D1, pin_IN1, pin_EN)
+
 def GetDirection():
     if gpio.read(pin_INV) == pigpio.LOW:
         return Direction.A
@@ -55,7 +57,7 @@ def SetDirection(dir):
 
 
 setupPins()
-SetThrottle(10)
+motors.motor1.setSpeed(100)
 time.sleep(1)
-SetThrottle(0)
+motors.motor1.setSpeed(0)
 exit
