@@ -66,11 +66,13 @@ def SetThrottle(throttlePercent):
 
     gpio.set_PWM_frequency(pin_pwm_D1, 8000)
     gpio.set_PWM_frequency(pin_pwm_D2, 8000)
+    gpio.set_pull_up_down(pin_pwm_D2, pigpio.PUD_DOWN)
+    gpio.write(pin_pwm_D2, pigpio.LOW)
     gpio.set_PWM_dutycycle(pin_pwm_D1, dutyCycle)
 
 
 setupPins()
-SetThrottle(10)
+SetThrottle(50)
 time.sleep(1)
 SetThrottle(0)
 exit
