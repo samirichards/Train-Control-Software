@@ -61,14 +61,12 @@ def SetThrottle(throttlePercent):
 
     dutyCycle = round(255 * (throttlePercent * 0.01))
     
-    gpio.write(pin_IN1, pigpio.HIGH)
-    gpio.write(pin_IN2, pigpio.LOW)
+    gpio.write(pin_pwm_D2, pigpio.HIGH)
+    gpio.write(pin_pwm_D1, pigpio.LOW)
 
     gpio.set_PWM_frequency(pin_pwm_D1, 8000)
     gpio.set_PWM_frequency(pin_pwm_D2, 8000)
-    gpio.set_pull_up_down(pin_pwm_D2, pigpio.PUD_DOWN)
-    gpio.write(pin_pwm_D2, pigpio.LOW)
-    gpio.set_PWM_dutycycle(pin_pwm_D1, dutyCycle)
+    gpio.set_PWM_dutycycle(pin_IN1, dutyCycle)
 
 
 setupPins()
