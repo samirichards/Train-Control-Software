@@ -69,7 +69,10 @@ def SetThrottle(throttlePercent):
     gpio.set_PWM_dutycycle(pin_IN1, dutyCycle)
 
 
-setupPins()
+gpio.set_mode(pin_pwm_D1, pigpio.INPUT)
+gpio.set_mode(pin_pwm_D2, pigpio.INPUT)
+print("D1 is currently: " + str(gpio.read(pin_pwm_D1)))
+print("D2 is currently: " + str(gpio.read(pin_pwm_D2)))
 SetThrottle(50)
 time.sleep(1)
 SetThrottle(0)
