@@ -3,7 +3,7 @@ import pigpio
 
 LED_PIN = 37
 
-gpio = pigpio.pi
+gpio = pigpio.pi()
 gpio.set_mode(gpio, LED_PIN, pigpio.OUTPUT)
 gpio.set_pull_up_down(gpio, LED_PIN, pigpio.PUD_UP)
 while(True):
