@@ -1,7 +1,6 @@
+import time
 import pigpio
 from enum import Enum
-import time
-from dual_mc33926_rpi import motors, MAX_SPEED
 
 #Pin assignments
 pin_IN1 = 6
@@ -41,8 +40,6 @@ def setupPins():
 
     SetDirection(Direction.A)
 
-    motors.motor1.__init__(pin_pwm_D1, pin_IN1, pin_EN)
-
 def GetDirection():
     if gpio.read(pin_INV) == pigpio.LOW:
         return Direction.A
@@ -55,9 +52,25 @@ def SetDirection(dir):
     else:
         gpio.write(pin_IN1, pigpio.HIGH)
 
+def SetThrottle(throttlePercent):
+    if throttlePercent <= 0:
+        gpio.write(pin_EN, pigpio.LOW)
+        return
+    else:
+        gpio.write(pin_EN, pigpio.HIGH)
+
+    dutyCycle = round(255 * (throttlePercent * 0.01))
+    
+    gpio.write(pin_IN1, pigpio.HIGH)
+    gpio.write(pin_IN2, pigpio.LOW)
+
+    gpio.set_PWM_frequency(pin_pwm_D1, 8000)
+    gpio.set_PWM_frequency(pin_pwm_D2, 8000)
+    gpio.set_PWM_dutycycle(pin_pwm_D1, dutyCycle)
+
 
 setupPins()
-motors.motor1.setSpeed(100)
+SetThrottle(10)
 time.sleep(1)
-motors.motor1.setSpeed(0)
+SetThrottle(0)
 exit
