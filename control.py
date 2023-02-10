@@ -50,7 +50,7 @@ def SetDirection(dir):
     if dir == Direction.A:
         gpio.write(pin_INV, pigpio.LOW)
     else:
-        gpio.write(pin_IN1, pigpio.HIGH)
+        gpio.write(pin_INV, pigpio.HIGH)
 
 def SetThrottle(throttlePercent):
     if throttlePercent <= 0:
@@ -59,20 +59,13 @@ def SetThrottle(throttlePercent):
     else:
         gpio.write(pin_EN, pigpio.HIGH)
 
-    dutyCycle = round(255 * (throttlePercent * 0.01))
-    
-    gpio.write(pin_pwm_D2, pigpio.HIGH)
-    gpio.write(pin_pwm_D1, pigpio.LOW)
-
-    gpio.set_PWM_frequency(pin_pwm_D1, 8000)
-    gpio.set_PWM_frequency(pin_pwm_D2, 8000)
-    gpio.set_PWM_dutycycle(pin_IN1, dutyCycle)
+    dutyCycle = int(throttlePercent / 100.0 * 255)
+    gpio.set_PWM_dutycycle(pin_pwm_D1, dutyCycle)
+    gpio.set_PWM_dutycycle(pin_pwm_D2, dutyCycle)
 
 
-gpio.set_mode(pin_pwm_D1, pigpio.INPUT)
-gpio.set_mode(pin_pwm_D2, pigpio.INPUT)
-print("D1 is currently: " + str(gpio.read(pin_pwm_D1)))
-print("D2 is currently: " + str(gpio.read(pin_pwm_D2)))
+setupPins()
+#This function needs to work
 SetThrottle(50)
 time.sleep(1)
 SetThrottle(0)
