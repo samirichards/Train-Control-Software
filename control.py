@@ -55,6 +55,8 @@ def SetDirection(dir):
 def SetThrottle(throttlePercent):
     if throttlePercent <= 0:
         gpio.write(pin_EN, pigpio.LOW)
+        gpio.set_PWM_dutycycle(pin_pwm_D1, 0)
+        gpio.set_PWM_dutycycle(pin_pwm_D2, 0)
         return
     else:
         gpio.write(pin_EN, pigpio.HIGH)
