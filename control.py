@@ -10,6 +10,7 @@ pin_pwm_D2 = 12
 pin_INV = 19
 pin_EN = 26
 pin_SLEW = 22
+pin_SF = 17
 
 class Direction(Enum):
     #A end = away from motor
@@ -29,6 +30,8 @@ def setupPins():
     gpio.set_mode(pin_INV, pigpio.OUTPUT)
     gpio.set_mode(pin_EN, pigpio.OUTPUT)
     gpio.set_mode(pin_SLEW, pigpio.OUTPUT)
+    gpio.set_mode(pin_SF, pigpio.INPUT)
+    gpio.set_pull_up_down(pin_SF, pigpio.PUD_UP)
 
     gpio.write(pin_IN1, pigpio.LOW)
     gpio.write(pin_IN2, pigpio.LOW)
@@ -68,7 +71,7 @@ def SetThrottle(throttlePercent):
 
 setupPins()
 #This function needs to work
-SetThrottle(50)
+SetThrottle(5)
 time.sleep(1)
 SetThrottle(0)
 exit
