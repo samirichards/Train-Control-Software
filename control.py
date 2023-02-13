@@ -25,8 +25,14 @@ gpio = pigpio.pi()
 def setupPins():
     gpio.set_mode(pin_IN1, pigpio.OUTPUT)
     gpio.set_mode(pin_IN2, pigpio.OUTPUT)
+
     gpio.set_mode(pin_pwm_D1, pigpio.OUTPUT)
     gpio.set_mode(pin_pwm_D2, pigpio.OUTPUT)
+    gpio.set_PWM_range(pin_pwm_D1, 255)
+    gpio.set_PWM_range(pin_pwm_D2, 255)
+    gpio.set_PWM_frequency(pin_pwm_D1, 5)
+    gpio.set_PWM_frequency(pin_pwm_D2, 5)
+
     gpio.set_mode(pin_INV, pigpio.OUTPUT)
     gpio.set_mode(pin_EN, pigpio.OUTPUT)
     gpio.set_mode(pin_SLEW, pigpio.OUTPUT)
@@ -35,8 +41,6 @@ def setupPins():
 
     gpio.write(pin_IN1, pigpio.LOW)
     gpio.write(pin_IN2, pigpio.LOW)
-    gpio.write(pin_pwm_D1, pigpio.LOW)
-    gpio.write(pin_pwm_D2, pigpio.LOW)
     gpio.write(pin_INV, pigpio.LOW)
     gpio.write(pin_EN, pigpio.HIGH)
     gpio.write(pin_SLEW, pigpio.LOW)
