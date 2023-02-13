@@ -38,7 +38,7 @@ def setupPins():
     gpio.write(pin_pwm_D1, pigpio.LOW)
     gpio.write(pin_pwm_D2, pigpio.LOW)
     gpio.write(pin_INV, pigpio.LOW)
-    gpio.write(pin_EN, pigpio.LOW)
+    gpio.write(pin_EN, pigpio.HIGH)
     gpio.write(pin_SLEW, pigpio.LOW)
 
     SetDirection(Direction.A)
@@ -71,7 +71,7 @@ def SetThrottle(throttlePercent):
 
 setupPins()
 #This function needs to work
-SetThrottle(5)
+SetThrottle(100)
 time.sleep(1)
 SetThrottle(0)
 exit
