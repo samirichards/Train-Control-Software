@@ -30,8 +30,8 @@ def setupPins():
     gpio.set_mode(pin_pwm_D2, pigpio.OUTPUT)
     gpio.set_PWM_range(pin_pwm_D1, 255)
     gpio.set_PWM_range(pin_pwm_D2, 255)
-    gpio.set_PWM_frequency(pin_pwm_D1, 5)
-    gpio.set_PWM_frequency(pin_pwm_D2, 5)
+    gpio.set_PWM_frequency(pin_pwm_D1, 16000)
+    gpio.set_PWM_frequency(pin_pwm_D2, 16000)
 
     gpio.set_mode(pin_INV, pigpio.OUTPUT)
     gpio.set_mode(pin_EN, pigpio.OUTPUT)
@@ -43,7 +43,7 @@ def setupPins():
     gpio.write(pin_IN2, pigpio.LOW)
     gpio.write(pin_INV, pigpio.LOW)
     gpio.write(pin_EN, pigpio.HIGH)
-    gpio.write(pin_SLEW, pigpio.LOW)
+    gpio.write(pin_SLEW, pigpio.HIGH)
 
     SetDirection(Direction.A)
 
@@ -59,23 +59,48 @@ def SetDirection(dir):
     else:
         gpio.write(pin_INV, pigpio.HIGH)
 
+def GetStatus():
+    return gpio.read(pin_SF)
+
 def SetThrottle(throttlePercent):
     if throttlePercent <= 0:
         gpio.write(pin_EN, pigpio.LOW)
-        gpio.set_PWM_dutycycle(pin_pwm_D1, 0)
-        gpio.set_PWM_dutycycle(pin_pwm_D2, 0)
+        gpio.hardware_PWM(pin_pwm_D1, 0, 0)
+        gpio.hardware_PWM(pin_pwm_D2, 0, 0)
+        gpio.write(pin_IN1, pigpio.LOW)
+        gpio.write(pin_IN2, pigpio.LOW)
         return
     else:
         gpio.write(pin_EN, pigpio.HIGH)
 
-    dutyCycle = int(throttlePercent / 100.0 * 255)
-    gpio.set_PWM_dutycycle(pin_pwm_D1, dutyCycle)
-    gpio.set_PWM_dutycycle(pin_pwm_D2, dutyCycle)
+    #dutyCycle = int(throttlePercent / 100.0 * 255)
+    dutyCycle = int(throttlePercent * 10000)
+    if CurrentDirection == Direction.A:
+        gpio.write(pin_IN1, pigpio.HIGH)
+        gpio.write(pin_IN2, pigpio.LOW)
+        gpio.hardware_PWM(pin_pwm_D1, 16000, dutyCycle)
+        gpio.hardware_PWM(pin_pwm_D2, 16000, 0)
+    else:
+        gpio.write(pin_IN1, pigpio.LOW)
+        gpio.write(pin_IN2, pigpio.HIGH)
+        gpio.hardware_PWM(pin_pwm_D1, 16000, 0)
+        gpio.hardware_PWM(pin_pwm_D2, 16000, dutyCycle)
 
-
-setupPins()
+print("Status pin is initally: " + str(GetStatus()))
+#setupPins()
 #This function needs to work
+
+gpio.set_mode(pin_IN1, pigpio.OUTPUT)
+gpio.set_mode(pin_IN2, pigpio.OUTPUT)
+gpio.set_mode(pin_pwm_D1, pigpio.OUTPUT)
+gpio.set_mode(pin_pwm_D2, pigpio.OUTPUT)
+
+
+print("Status pin is currently: " + str(GetStatus()))
+time.sleep(0.1)
 SetThrottle(100)
-time.sleep(1)
+print(str(gpio.read(pin_EN)))
+time.sleep(3)
 SetThrottle(0)
+print("Status pin is now: " + str(GetStatus()))
 exit
