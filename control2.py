@@ -77,7 +77,7 @@ def Cleanup():
     gpio.stop
 
 def main():
-    MakeNoise(5)
+    #Put behaviour here
     return
 
 if __name__ == '__main__':
